@@ -122,12 +122,10 @@ upload_proxy
 yum install -y squid
 systemctl start squid
 systemctl enable squid
-systemctl status squid
 
-yum install 3proxy
+yum install -y 3proxy
 systemctl start 3proxy
 systemctl enable squid
-systemctl status 3proxy
 
 yum -y install httpd-tools
 touch /etc/squid/passwd
