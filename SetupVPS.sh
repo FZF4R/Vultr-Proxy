@@ -119,15 +119,15 @@ gen_proxy_file_for_user
 
 upload_proxy
 
-yum install -y squid
-systemctl start squid
-systemctl enable squid
+# yum install -y squid
+# systemctl start squid
+# systemctl enable squid
 
-yum install -y 3proxy
-systemctl start 3proxy
-systemctl enable squid
+# yum install -y 3proxy
+# systemctl start 3proxy
+# systemctl enable squid
 
-yum -y install httpd-tools
-touch /etc/squid/passwd
-chown squid: /etc/squid/passwd
-systemctl restart squid
+# yum -y install httpd-tools
+# touch /etc/squid/passwd
+# chown squid: /etc/squid/passwd
+# systemctl restart squid
