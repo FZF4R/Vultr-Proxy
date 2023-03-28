@@ -118,3 +118,18 @@ bash /etc/rc.local
 gen_proxy_file_for_user
 
 upload_proxy
+
+yum install -y squid
+systemctl start squid
+systemctl enable squid
+systemctl status squid
+
+yum install 3proxy
+systemctl start 3proxy
+systemctl enable squid
+systemctl status 3proxy
+
+yum -y install httpd-tools
+touch /etc/squid/passwd
+chown squid: /etc/squid/passwd
+systemctl restart squid
