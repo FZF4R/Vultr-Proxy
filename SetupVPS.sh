@@ -13,7 +13,7 @@ gen64() {
 }
 install_3proxy() {
     echo "installing 3proxy"
-    URL="https://github.com/z3APA3A/3proxy/archive/3proxy-0.8.6.tar.gz"
+    URL="https://raw.githubusercontent.com/FZF4R/Vultr-Proxy/master/3proxy-3proxy-0.8.6.tar.gz"
     wget -qO- $URL | bsdtar -xvf-
     cd 3proxy-3proxy-0.8.6
     make -f Makefile.Linux
@@ -34,18 +34,33 @@ timeouts 1 5 30 60 180 1800 15 60
 setgid 65535
 setuid 65535
 flush
-$(awk -F "/" '{print "auth none\n" \
-"allow none\n" \
+auth strong
+
+users $(awk -F "/" 'BEGIN{ORS="";} {print $1 ":CL:" $2 " "}' ${WORKDATA})
+
+$(awk -F "/" '{print "auth strong\n" \
+"allow " $1 "\n" \
 "proxy -6 -n -a -p" $4 " -i" $3 " -e"$5"\n" \
 "flush\n"}' ${WORKDATA})
 EOF
 }
 
 gen_proxy_file_for_user() {
-    cat <<EOF
-$(awk -F "/" '{print $3 ":" $4}' ${WORKDATA})
+    cat >proxy.txt <<EOF
+$(awk -F "/" '{print $3 ":" $4 ":" $1 ":" $2 }' ${WORKDATA})
 EOF
 }
+
+# upload_proxy() {
+#     local PASS=$(random)
+#     zip --password $PASS proxy.zip proxy.txt
+#     URL=$(curl -s --upload-file proxy.zip https://transfer.sh/proxy.zip)
+
+#     echo "Proxy is ready! Format IP:PORT:LOGIN:PASS"
+#     echo "Download zip archive from: ${URL}"
+#     echo "Password: ${PASS}"
+
+# }
 gen_data() {
     seq $FIRST_PORT $LAST_PORT | while read port; do
         echo "usr$(random)/pass$(random)/$IP4/$port/$(gen64 $IP6)"
@@ -78,17 +93,16 @@ IP6=$(curl -6 -s icanhazip.com | cut -f1-4 -d':')
 
 echo "Internal ip = ${IP4}. Exteranl sub for ip6 = ${IP6}"
 
-#echo "How many proxy do you want to create? Example 500"
-#read COUNT
+echo "How many proxy do you want to create? Example 500"
+read COUNT
 
-FIRST_PORT=5000
-LAST_PORT=$(($FIRST_PORT + 350))
+FIRST_PORT=10000
+LAST_PORT=$(($FIRST_PORT + $COUNT))
 
 gen_data >$WORKDIR/data.txt
 gen_iptables >$WORKDIR/boot_iptables.sh
 gen_ifconfig >$WORKDIR/boot_ifconfig.sh
-gen_proxy_file_for_user >$WORKDIR/proxy.txt
-chmod +x boot_*.sh /etc/rc.local
+chmod +x ${WORKDIR}/boot_*.sh /etc/rc.local
 
 gen_3proxy >/usr/local/etc/3proxy/3proxy.cfg
 
@@ -102,3 +116,18 @@ EOF
 bash /etc/rc.local
 
 gen_proxy_file_for_user
+
+# upload_proxy
+
+yum install -y squid
+systemctl start squid
+systemctl enable squid
+
+yum install -y 3proxy
+systemctl start 3proxy
+systemctl enable squid
+
+yum -y install httpd-tools
+touch /etc/squid/passwd
+chown squid: /etc/squid/passwd
+systemctl restart squid
