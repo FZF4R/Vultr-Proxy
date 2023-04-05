@@ -71,8 +71,8 @@ EOF
 echo "installing apps"
 yum -y install gcc net-tools bsdtar zip >/dev/null
 
-sudo yum install bsdtar
-sudo yum install wget
+sudo yum install bsdtar -y
+sudo yum install wget -y
 
 install_3proxy
 
