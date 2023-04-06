@@ -1,0 +1,12 @@
+# Created by cloud-init on instance boot automatically, do not edit.
+#
+BOOTPROTO=dhcp
+DEVICE=eth0
+HWADDR=56:00:04:62:8c:d7
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_FORCE_ACCEPT_RA=yes
+NM_CONTROLLED=no
+ONBOOT=yes
+TYPE=Ethernet
+USERCTL=no
