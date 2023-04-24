@@ -37,7 +37,7 @@ setuid 65535
 flush
 auth strong
 
-users $(awk -F "/" 'BEGIN{ORS="";} {print $1 ":CL:" $2 " "}' ${WORKDATA})
+users $(awk -F "/" 'BEGIN{ORS="";} {print $1 ":CL:" $2 " "}' "/home/proxy-installer/data.txt")
 
 $(awk -F "/" '{print "auth strong\n" \
 "allow " $1 "\n" \
@@ -74,7 +74,7 @@ yum -y install gcc net-tools bsdtar zip >/dev/null
 
 echo "working folder = /home/proxy-installer"
 WORKDIR="/home/proxy-installer"
-WORKDATA="${WORKDIR}/data.txt"
+WORKDATA="${WORKDIR}/datam.txt"
 mkdir $WORKDIR && cd $_
 
 IP4=$(curl -4 -s icanhazip.com)
