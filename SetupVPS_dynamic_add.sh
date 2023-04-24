@@ -72,8 +72,8 @@ EOF
 echo "installing apps"
 yum -y install gcc net-tools bsdtar zip >/dev/null
 
-echo "working folder = /home/proxy-installer"
-WORKDIR="/home/proxy-installer"
+echo "working folder = /home/proxy-installer-add"
+WORKDIR="/home/proxy-installer-add"
 WORKDATA="${WORKDIR}/datam.txt"
 mkdir $WORKDIR && cd $_
 
