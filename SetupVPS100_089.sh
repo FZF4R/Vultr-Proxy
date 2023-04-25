@@ -81,6 +81,7 @@ EOF
 }
 echo "installing apps"
 yum -y install gcc net-tools bsdtar zip >/dev/null
+yum -y install make
 
 install_3proxy
 
